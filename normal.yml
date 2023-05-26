@@ -1,0 +1,8 @@
+# Normal attack
+damage: 1.0
+cooldown: 0.5
+duration: 0.5
+action: "attack_action" 
+path: 
+  - [0,0,0]
+  - [3,0,0]

@@ -1,14 +1,7 @@
 use bevy::{prelude::*, render::camera::ScalingMode};
-use snowball_fight::CelMaterial;
+use snowball_fight::materials::CelMaterial;
 use crate::collision::components::Collider;
 
-pub fn spawn_camera(mut commands: Commands){
-    commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(-2.0, 2.5, 5.0)
-            .looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-    });
-}
 
 pub fn spawn_walls (
     mut commands: Commands, 
@@ -24,14 +17,15 @@ pub fn spawn_walls (
             light: light_position,
             alpha_mode: AlphaMode::Blend,
         }),
-        transform: Transform::from_xyz(3.0, 0.5, 0.0),
+        transform: Transform::from_xyz(3.0, 0.5, -5.0),
         ..default()
     })
     .insert(Name::new("Wall"))
     .insert(Collider {
         x_size: 1.5,
         y_size: 0.5,
-        z_size: 0.5
+        z_size: 0.5,
+        is_trigger: false
     });
 
 
@@ -42,15 +36,32 @@ pub fn spawn_walls (
             light: light_position,
             alpha_mode: AlphaMode::Blend,
         }),
-        transform: Transform::from_xyz(-3.0, 0.5, 0.0),
+        transform: Transform::from_xyz(-5.0, 0.5, 5.0),
         ..default()
     })
     .insert(Collider {
         x_size: 1.5,
         y_size: 0.5,
-        z_size: 0.5
+        z_size: 0.5,
+        is_trigger: false
     });
 
+    commands.spawn(MaterialMeshBundle {
+        mesh: meshes.add(Mesh::from(shape::Box::new(3.0, 1.0, 1.0))),
+        material: materials.add(CelMaterial {
+            color: Color::RED,
+            light: light_position,
+            alpha_mode: AlphaMode::Blend,
+        }),
+        transform: Transform::from_xyz(0.0, 0.5, 2.0),
+        ..default()
+    })
+    .insert(Collider {
+        x_size: 1.5,
+        y_size: 0.5,
+        z_size: 0.5,
+        is_trigger: false
+    });
     commands.spawn(MaterialMeshBundle {
         mesh: meshes.add(Mesh::from(shape::Box::new(3.0, 1.0, 1.0))),
         material: materials.add(CelMaterial {
@@ -58,13 +69,14 @@ pub fn spawn_walls (
             light: light_position,
             alpha_mode: AlphaMode::Blend,
         }),
-        transform: Transform::from_xyz(0.0, 0.5, -3.0),
+        transform: Transform::from_xyz(0.0, 0.5, -2.0),
         ..default()
     })
     .insert(Collider {
         x_size: 1.5,
         y_size: 0.5,
-        z_size: 0.5
+        z_size: 0.5,
+        is_trigger: false
     });
 }
 pub fn spawn_basic_scene(
@@ -72,15 +84,15 @@ pub fn spawn_basic_scene(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials_std: ResMut<Assets<StandardMaterial>>,
 ) {
-    let light_position: Vec3 = Vec3::new(2.3, 6.7, -0.6);
     // plane
     commands.spawn(PbrBundle {
-        mesh: meshes.add(shape::Plane::from_size(10.0).into()),
+        mesh: meshes.add(shape::Plane::from_size(20.0).into()),
         material: materials_std.add(StandardMaterial {
             base_color: Color::WHITE,
             metallic: 0.1,
             ..default()
         }),
+        transform: Transform::from_xyz(0.0, 0.0, 0.0),
         ..default()
     });
     
@@ -91,19 +103,20 @@ pub fn spawn_basic_scene(
             shadows_enabled: true,
             ..default()
         },
-        transform: Transform::from_xyz(2.3, 6.7, -0.6),
+        transform: Transform::from_xyz(0.0, 10.0, 0.0),
         ..default()
     })
     ;
     // camera
     commands.spawn(Camera3dBundle {
         projection: OrthographicProjection {
-            scale: 3.0,
+            scale: 5.0,
+            near: -5.0,
             scaling_mode: ScalingMode::FixedVertical(2.0),
             ..default()
         }
         .into(),
-        transform: Transform::from_xyz(0.0, 4.0, 5.0)
+        transform: Transform::from_xyz(0.0, 4.0, 5.5)
             .with_rotation(Quat::from_xyzw(-0.3, 0.0, 0.0, 0.9)), //.looking_at(Vec3::X, Vec3::Y),
         ..default()
     });

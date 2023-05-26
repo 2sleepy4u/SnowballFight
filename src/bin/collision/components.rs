@@ -5,5 +5,8 @@ use bevy::prelude::*;
 pub struct Collider {
     pub x_size: f32,
     pub y_size: f32,
-    pub z_size: f32
+    pub z_size: f32,
+
+    pub is_trigger: bool
 }
+

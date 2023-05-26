@@ -17,7 +17,8 @@ pub fn check_collision(
                     collision_event.send(CollisionEvent {
                         source: s_entity,
                         target: t_entity,
-                        direction: direction
+                        direction: direction,
+                        is_trigger: t_collider.is_trigger
                     });
                 }
             }

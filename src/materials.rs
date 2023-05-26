@@ -1,25 +1,6 @@
 pub use bevy::prelude::*;
-pub use bevy_renet::renet::*;
-pub use bevy_renet::*;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ClientMessage {
-    Ping,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ServerMessage {
-    Pong,
-}
-
-pub const PROTOCOL_ID: u64 = 1000;
-
-use bevy::{
-    prelude::*,
-    reflect::TypeUuid,
-    render::render_resource::{AsBindGroup, ShaderRef},
-};
+use bevy::render::render_resource::*;
+use bevy::reflect::TypeUuid;
 
 
 impl Material for CelMaterial {
